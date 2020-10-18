@@ -15,40 +15,42 @@ class _AuthFormState extends State<AuthForm> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email address',
-                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email address',
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                SizedBox(height: 12.0),
-                RaisedButton(
-                  child: Text('Login'),
-                  onPressed: () {},
-                ),
-                FlatButton(
-                  child: Text('Create new account'),
-                  onPressed: () {},
-                ),
-              ],
-            )),
+                  SizedBox(height: 12.0),
+                  RaisedButton(
+                    child: Text('Login'),
+                    onPressed: () {},
+                  ),
+                  FlatButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Text('Create new account'),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
