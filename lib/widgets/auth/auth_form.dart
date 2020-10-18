@@ -6,6 +6,26 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
+  final _formKey = GlobalKey<FormState>();
+  var _isLogin = true;
+  var _userEmail = '';
+  var _userName = '';
+  var _userPassword = '';
+
+  void _trySubmit() {
+    final isValid = _formKey.currentState.validate();
+    // This closes the keyboard when we submit the form.
+    FocusScope.of(context).unfocus();
+
+    if (isValid) {
+      _formKey.currentState.save();
+      print(_userEmail);
+      print(_userName);
+      print(_userPassword);
+      // TODO: Use those values to send our auth request...
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -15,38 +35,77 @@ class _AuthFormState extends State<AuthForm> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
+                    key: ValueKey('email'),
+                    validator: (value) {
+                      if (value.isEmpty || !value.contains('@')) {
+                        return 'Please enter a valid email address.';
+                      }
+                      return null;
+                    },
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email address',
                       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    onSaved: (newValue) {
+                      _userEmail = newValue;
+                    },
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  if (!_isLogin)
+                    TextFormField(
+                      key: ValueKey('username'),
+                      validator: (value) {
+                        if (value.isEmpty || value.length < 4) {
+                          return 'Please enter at least 4 characters.';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onSaved: (newValue) {
+                        _userName = newValue;
+                      },
                     ),
-                  ),
                   TextFormField(
+                    key: ValueKey('password'),
+                    validator: (value) {
+                      if (value.isEmpty || value.length < 7) {
+                        return 'Password must be at least 7 characters long.';
+                      }
+                      return null;
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    onSaved: (newValue) {
+                      _userPassword = newValue;
+                    },
                   ),
                   SizedBox(height: 12.0),
                   RaisedButton(
-                    child: Text('Login'),
-                    onPressed: () {},
+                    child: Text(_isLogin ? 'Login' : 'Signup'),
+                    onPressed: _trySubmit,
                   ),
                   FlatButton(
                     textColor: Theme.of(context).primaryColor,
-                    child: Text('Create new account'),
-                    onPressed: () {},
+                    child: Text(_isLogin
+                        ? 'Create new account'
+                        : 'I already have an account'),
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
                   ),
                 ],
               ),
