@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../widgets/chat/messages.dart';
+
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,31 +40,14 @@ class ChatScreen extends StatelessWidget {
           )
         ],
       ),
-      body: StreamBuilder(
-        // This is a live listener to our connection, so whenever we
-        // add a new document in the real database, the app print in
-        // the console the new entry. (nice start)
-        stream: Firestore.instance
-            .collection('chats/bwtwO93loRdDEPDGA3lI/messages')
-            .snapshots(),
-        builder: (context, streamSnapshot) {
-          // The condition below handles the milisecond to reach the db, i.e.,
-          // when we don't have data yet.
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final documents = streamSnapshot.data.documents;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (context, index) => Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(documents[index]['text']),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages(),
             ),
-          );
-        },
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
