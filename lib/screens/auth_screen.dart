@@ -25,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
     bool isLogin,
     BuildContext ctx,
   ) async {
-    AuthResult authResult;
+    UserCredential authResult;
 
     // With async-await we can use try catch.
     try {
@@ -53,10 +53,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
         final url = await ref.getDownloadURL();
 
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
-            .document(authResult.user.uid)
-            .setData({
+            .doc(authResult.user.uid)
+            .set({
           'username': username,
           'email': email,
           'image_url': url,
