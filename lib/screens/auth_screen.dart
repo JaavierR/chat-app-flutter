@@ -25,6 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     // With async-await we can use try catch.
     try {
+      // setState creates an error
       setState(() {
         _isLoading = true;
       });
