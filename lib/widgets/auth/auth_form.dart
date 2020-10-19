@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../pickers/user_image_picker.dart';
@@ -28,11 +30,26 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  File _userImageFile;
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
+  }
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     // This closes the keyboard when we submit the form.
     FocusScope.of(context).unfocus();
+
+    if (_userImageFile == null && !_isLogin) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick and image.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
 
     if (isValid) {
       _formKey.currentState.save();
@@ -60,7 +77,10 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!_isLogin) UserImagePicker(),
+                  if (!_isLogin)
+                    UserImagePicker(
+                      imagePickFn: _pickedImage,
+                    ),
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
